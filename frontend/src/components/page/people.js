@@ -18,31 +18,33 @@ import { Redirect } from 'react-router-dom'
 import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
+import PersonCard from '../subComponents/cards/personCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function Planets({userFromStore}) {
+function People({userFromStore}) {
     const [research, setResearch] = useState('');
-    const [planets, setPlanets] = useState([]);
+    const [people, setPeople] = useState([]);
+
     useEffect(()=>{
-        const getPlanets = () => {
-            fetch(`http://localhost:3000/planets`)
+        const getPeople = () => {
+            fetch(`http://localhost:3000/people`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 console.log(jsonResponse)
-                let unsortedPlanets = jsonResponse.planets;
-                let sortedPlanets = unsortedPlanets.sort((a, b) => a.name.localeCompare(b.name))
-                setPlanets(sortedPlanets);
+                let unsortedPeople = jsonResponse.people;
+                let sortedPeople = unsortedPeople.sort((a, b) => a.name.localeCompare(b.name))
+                setPeople(sortedPeople);
             })
 
         }
-        getPlanets();
+        getPeople();
     },[])
 
-    let cards = planets.map((planet,index)=> {
+    let cards = people.map((person,index)=> {
 
         return(
-            <PlanetCard key={index + planet.name} planet={planet} />
+            <PersonCard key={index + person.name} person={person} />
         )
     })
     if(!userFromStore) {
@@ -52,7 +54,7 @@ function Planets({userFromStore}) {
       <Container>
           <NavBar />
           {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-          <h4 className='SubTitle mt-4'>This is all the planets recorded from the database</h4>
+          <h4 className='SubTitle mt-4'>This is all the people recorded from the database</h4>
 
           {/* <Row className='justify-content-center mt-5'>
             <Form
@@ -104,4 +106,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(Planets);
+  )(People);

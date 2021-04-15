@@ -18,31 +18,34 @@ import { Redirect } from 'react-router-dom'
 import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
+import PersonCard from '../subComponents/cards/personCard';
+import FilmCard from '../subComponents/cards/filmCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function Planets({userFromStore}) {
+function Films({userFromStore}) {
     const [research, setResearch] = useState('');
-    const [planets, setPlanets] = useState([]);
+    const [films, setFilms] = useState([]);
+
     useEffect(()=>{
-        const getPlanets = () => {
-            fetch(`http://localhost:3000/planets`)
+        const getFilms = () => {
+            fetch(`http://localhost:3000/films`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 console.log(jsonResponse)
-                let unsortedPlanets = jsonResponse.planets;
-                let sortedPlanets = unsortedPlanets.sort((a, b) => a.name.localeCompare(b.name))
-                setPlanets(sortedPlanets);
+                let unsortedFilms = jsonResponse.films;
+                let sortedFilms = unsortedFilms.sort((a, b) => a.episode_id - b.episode_id)
+                setFilms(sortedFilms);
             })
 
         }
-        getPlanets();
+        getFilms();
     },[])
 
-    let cards = planets.map((planet,index)=> {
+    let cards = films.map((film,index)=> {
 
         return(
-            <PlanetCard key={index + planet.name} planet={planet} />
+            <FilmCard key={index + film.title} film={film} />
         )
     })
     if(!userFromStore) {
@@ -52,7 +55,7 @@ function Planets({userFromStore}) {
       <Container>
           <NavBar />
           {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-          <h4 className='SubTitle mt-4'>This is all the planets recorded from the database</h4>
+          <h4 className='SubTitle mt-4'>This is all the films recorded from the database</h4>
 
           {/* <Row className='justify-content-center mt-5'>
             <Form
@@ -104,4 +107,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(Planets);
+  )(Films);

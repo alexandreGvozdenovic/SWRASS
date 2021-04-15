@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 // MY COMPONENTS
 import CustomList from '../subComponents/list';
+import NavBar from '../subComponents/navbar';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
@@ -46,7 +47,8 @@ function Home({userFromStore}) {
     }
   return (
       <Container>
-          <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1>
+        <NavBar />
+          {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
           <h4 className='SubTitle mt-4'>Welcome {userFromStore.name}</h4>
           <Row className='justify-content-center mt-5'>
             <Form
