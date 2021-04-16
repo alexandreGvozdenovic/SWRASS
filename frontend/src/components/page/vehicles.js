@@ -11,7 +11,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
@@ -20,31 +19,35 @@ import { Redirect } from 'react-router-dom'
 import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
+import PersonCard from '../subComponents/cards/personCard';
+import FilmCard from '../subComponents/cards/filmCard';
+import VehicleCard from '../subComponents/cards/vehicleCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function Planets({userFromStore}) {
+function Vehicles({userFromStore}) {
     const [research, setResearch] = useState('');
-    const [planets, setPlanets] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
+
     useEffect(()=>{
-        const getPlanets = () => {
-            fetch(`http://localhost:3000/planets`)
+        const getVehicles = () => {
+            fetch(`http://localhost:3000/vehicles`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 console.log(jsonResponse)
-                let unsortedPlanets = jsonResponse.planets;
-                let sortedPlanets = unsortedPlanets.sort((a, b) => a.name.localeCompare(b.name))
-                setPlanets(sortedPlanets);
+                let unsortedVehicles = jsonResponse.vehicles;
+                let sortedVehicles = unsortedVehicles.sort((a, b) => a.name.localeCompare(b.name));
+                setVehicles(sortedVehicles);
             })
 
         }
-        getPlanets();
+        getVehicles();
     },[])
 
-    let cards = planets.map((planet,index)=> {
+    let cards = vehicles.map((vehicle, index) => {
 
         return(
-            <PlanetCard key={index + planet.name} planet={planet} />
+            <VehicleCard key={index + vehicle.name} vehicle={vehicle} />
         )
     })
     if(!userFromStore) {
@@ -53,13 +56,12 @@ function Planets({userFromStore}) {
   return (
       <Container>
           <NavBar />
-          {planets.length === 0 &&(
-            <h4 className='SubTitle mt-4'>Planets are being retrieved from the database <Spinner animation="border" /></h4>
+          {vehicles.length === 0 &&(
+            <h4 className='SubTitle mt-4'>Vehicles are being retrieved from the database <Spinner animation="border" /></h4>
           )}
-          {planets.length > 0 &&(
-            <h4 className='SubTitle mt-4'>This is all the planets recorded from the database</h4>
+          {vehicles.length > 0 &&(
+            <h4 className='SubTitle mt-4'>This is all the vehicles recorded from the database</h4>
           )}
-
           {/* <Row className='justify-content-center mt-5'>
             <Form
                 inline 
@@ -110,4 +112,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(Planets);
+  )(Vehicles);

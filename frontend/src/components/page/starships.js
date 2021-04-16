@@ -20,31 +20,36 @@ import { Redirect } from 'react-router-dom'
 import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
+import PersonCard from '../subComponents/cards/personCard';
+import FilmCard from '../subComponents/cards/filmCard';
+import VehicleCard from '../subComponents/cards/vehicleCard';
+import StarshipCard from '../subComponents/cards/starshipCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function Planets({userFromStore}) {
+function Starships({userFromStore}) {
     const [research, setResearch] = useState('');
-    const [planets, setPlanets] = useState([]);
+    const [starships, setStarships] = useState([]);
+
     useEffect(()=>{
-        const getPlanets = () => {
-            fetch(`http://localhost:3000/planets`)
+        const getStarships = () => {
+            fetch(`http://localhost:3000/starships`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 console.log(jsonResponse)
-                let unsortedPlanets = jsonResponse.planets;
-                let sortedPlanets = unsortedPlanets.sort((a, b) => a.name.localeCompare(b.name))
-                setPlanets(sortedPlanets);
+                let unsortedStarships = jsonResponse.starships;
+                let sortedStarships = unsortedStarships.sort((a, b) => a.name.localeCompare(b.name));
+                setStarships(sortedStarships);
             })
 
         }
-        getPlanets();
+        getStarships();
     },[])
 
-    let cards = planets.map((planet,index)=> {
+    let cards = starships.map((starship, index) => {
 
         return(
-            <PlanetCard key={index + planet.name} planet={planet} />
+            <StarshipCard key={index + starship.name} starship={starship} />
         )
     })
     if(!userFromStore) {
@@ -53,11 +58,11 @@ function Planets({userFromStore}) {
   return (
       <Container>
           <NavBar />
-          {planets.length === 0 &&(
-            <h4 className='SubTitle mt-4'>Planets are being retrieved from the database <Spinner animation="border" /></h4>
+          {starships.length === 0 &&(
+            <h4 className='SubTitle mt-4'>Starships are being retrieved from the database <Spinner animation="border" /></h4>
           )}
-          {planets.length > 0 &&(
-            <h4 className='SubTitle mt-4'>This is all the planets recorded from the database</h4>
+          {starships.length > 0 &&(
+            <h4 className='SubTitle mt-4'>This is all the starships recorded from the database</h4>
           )}
 
           {/* <Row className='justify-content-center mt-5'>
@@ -110,4 +115,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(Planets);
+  )(Starships);

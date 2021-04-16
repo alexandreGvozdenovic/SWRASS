@@ -25,37 +25,37 @@ import PersonCard from '../subComponents/cards/personCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function PlanetDetails({userFromStore, location}) {
-    const [planet, setPlanet] = useState();
-    console.log(planet);
+function StarshipDetails({userFromStore, location}) {
+    const [starship, setStarship] = useState();
+
     useEffect(() => {
-        const getPlanetInformation = () => {
-            let planetFromFront = JSON.stringify(location.state.planet);
-            fetch(`http://localhost:3000/planet?planetFromFront=${planetFromFront}`)
+        const getStarshipInformation = () => {
+            let starshipFromFront = JSON.stringify(location.state.starship);
+            fetch(`http://localhost:3000/starship?starshipFromFront=${starshipFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedPlanet)
-                setPlanet(jsonResponse.populatedPlanet);
+                console.log(jsonResponse.populatedStarship)
+                setStarship(jsonResponse.populatedStarship);
             })
 
         }
-        getPlanetInformation();
+        getStarshipInformation();
     },[])
 
     if(!userFromStore) {
         return ( <Redirect to='/' />)
-    } else if(planet === undefined) {
+    } else if(starship === undefined) {
         return(
             <Container>
                 <NavBar />
                 {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-                <h4 className='SubTitle mt-4'>This is {location.state.planet.name}</h4>
+                <h4 className='SubTitle mt-4'>This is the {location.state.starship.name}</h4>
                 <h5 className='SubTitle mt-4'>Learn all there is to know about it in a few seconds <Spinner animation="border" /></h5>
             </Container>
         )
     } else {
 
-        let filmCards = planet.films.map((film,index)=>{
+        let filmCards = starship.films.map((film,index)=>{
             return (
                 <Col xs={12} md={4}>
                     <FilmCard key={index + film.title} film={film} />
@@ -63,10 +63,10 @@ function PlanetDetails({userFromStore, location}) {
                 
             )
         })
-        let personCards = planet.residents.map((resident, index)=>{
+        let personCards = starship.pilots.map((pilot, index)=>{
             return (
                 <Col xs={12} md={4}>
-                    <PersonCard key={index + resident.name} person={resident} />
+                    <PersonCard key={index + pilot.name} person={pilot} />
                 </Col>
                 
             )
@@ -75,23 +75,21 @@ function PlanetDetails({userFromStore, location}) {
         <Container>
             <NavBar />
             {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-            <h4 className='SubTitle mt-4'>This is {planet.name}</h4>
+            <h4 className='SubTitle mt-4'>This is the {starship.name}</h4>
             <h5 className='SubTitle mt-4'>Learn all there is to know about it</h5>
             <Row className='display-flex flex-column mt-4'>
                 <h6>Description :</h6>
-                <p>The planet {planet.name} has a {planet.climate} climate and it's terrain is mostly {planet.terrain}.
-                It's diameter is {planet.diameter} km, the planet is {planet.surface_water}% water and it's gravity is {planet.gravity} compared to Earth.
-                {planet.name} has an orbital period of {planet.orbital_period} days and it's rotation is done in {planet.rotation_period} hours.</p>
+                <p>The {starship.model} is a class {starship.starship_class} vehicle manufactured by {starship.manufacturer} with a top atmospherique speed of {starship.max_atmosphering_speed} km/h. It needs a crew of {starship.crew} to operate and can take up to {starship.passengers} passengers. The {starship.name}'s length is {starship.length} meters, it's cargo capacity is {starship.cargo_capacity} kg, it can provide it's crew for {starship.consumables} and it only costs {starship.cost_in_credits} credits. Concerning space travel the {starship.name} comes with a MGLT of {starship.MGLT} and an hyperdrive rating of {starship.hyperdrive_rating}.</p>
                 
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Films {planet.name} appeared in :</h6>
+                <h6>Films {starship.name} appeared in :</h6>
                 <Row>
                     {filmCards}
                 </Row>
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Residents of {planet.name} :</h6>
+                <h6>Pilots of the {starship.name} :</h6>
                 <Row>
                     {personCards}
                 </Row>
@@ -123,4 +121,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(PlanetDetails);
+  )(StarshipDetails);

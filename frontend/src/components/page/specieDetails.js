@@ -28,37 +28,37 @@ import StarshipCard from '../subComponents/cards/starshipCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function PersonDetails({userFromStore, location}) {
-    const [person, setPerson] = useState();
+function SpecieDetails({userFromStore, location}) {
+    const [specie, setSpecie] = useState();
 
     useEffect(() => {
-        const getPersonInformation = () => {
-            let personFromFront = JSON.stringify(location.state.person);
-            fetch(`http://localhost:3000/person?personFromFront=${personFromFront}`)
+        const getSpecieInformation = () => {
+            let specieFromFront = JSON.stringify(location.state.specie);
+            fetch(`http://localhost:3000/specie?specieFromFront=${specieFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedPerson)
-                setPerson(jsonResponse.populatedPerson);
+                console.log(jsonResponse.populatedSpecie)
+                setSpecie(jsonResponse.populatedSpecie);
             })
 
         }
-        getPersonInformation();
+        getSpecieInformation();
     },[])
 
 
     if(!userFromStore) {
         return ( <Redirect to='/' />)
-    } else if(person === undefined) {
+    } else if(specie === undefined) {
         return (
             <Container>
                 <NavBar />
                 {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-                <h4 className='SubTitle mt-4'>This is {location.state.person.name}</h4>
-                <h5 className='SubTitle mt-4'>Learn all there is to know about {location.state.person.gender === 'male' ? 'him' : 'her'} in a few seconds <Spinner animation="border" /></h5>
+                <h4 className='SubTitle mt-4'>This is the {location.state.specie.name} race</h4>
+                <h5 className='SubTitle mt-4'>Learn all there is to know about them in a few seconds <Spinner animation="border" /></h5>
             </Container>
         )
     } else {
-        let filmCards = person.films.map((film, index)=>{
+        let filmCards = specie.films.map((film, index)=>{
             return (
                 <Col xs={12} md={4}>
                     <FilmCard key={index + film.title} film={film} />
@@ -66,26 +66,10 @@ function PersonDetails({userFromStore, location}) {
                 
             )
         })
-        let specieCards = person.species.map((specie, index)=>{
+        let peopleCards = specie.people.map((person, index)=>{
             return (
                 <Col xs={12} md={4}>
-                    <SpecieCard key={index + specie.name} specie={specie} />
-                </Col>
-                
-            )
-        })
-        let vehicleCards = person.vehicles.map((vehicle, index)=>{
-            return (
-                <Col xs={12} md={4}>
-                    <VehicleCard key={index + vehicle.name} vehicle={vehicle} />
-                </Col>
-                
-            )
-        })
-        let starshipCards = person.starships.map((starship, index)=>{
-            return (
-                <Col xs={12} md={4}>
-                    <StarshipCard key={index + starship.name} starship={starship} />
+                    <PersonCard key={index + person.name} person={person} />
                 </Col>
                 
             )
@@ -94,12 +78,12 @@ function PersonDetails({userFromStore, location}) {
         <Container className='mb-5'>
             <NavBar />
             {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-            <h4 className='SubTitle mt-4'>This is {person.name}</h4>
-            <h5 className='SubTitle mt-4'>Learn all there is to know about {person.gender === 'male' ? 'him' : 'her'}</h5>
+            <h4 className='SubTitle mt-4'>This is the {specie.name} race</h4>
+            <h5 className='SubTitle mt-4'>Learn all there is to know about them</h5>
             <Row className='display-flex flex-column mt-4'>
                 <h6>Description :</h6>
                 <p>
-                    {person.name} was born the year {person.birth_year} {person.gender === 'male' ? 'he' : 'she'} is {person.height} cm tall and weights {person.mass} kg. {person.gender === 'male' ? 'He' : 'She'} has {person.eye_color} eyes, {person.hair_color} hair and {person.skin_color} skin.
+                    The {specie.name} is a {specie.classification} race, their average height is {specie.average_height} cm and they have an average lifespan of {specie.average_lifespan} years and their main language is the {specie.language}. Concerning looks they can have {specie.eye_colors} eyes, {specie.hair_colors} hairs and their skin can be {specie.skin_colors}. 
                 </p>
                 
             </Row>
@@ -107,32 +91,20 @@ function PersonDetails({userFromStore, location}) {
                 <h6>Homeworld :</h6>
                 <Row>
                     <Col>
-                        <PlanetCard planet={person.homeworld}/>
+                        <PlanetCard planet={specie.homeworld}/>
                     </Col>
-                </Row>
-            </Row>
-            <Row className='display-flex flex-column mt-4'>
-                <h6>Specie(s) :</h6>
-                <Row>
-                    {specieCards}
-                </Row>
-            </Row>
-            <Row className='display-flex flex-column mt-4'>
-                <h6>Vehicle(s) :</h6>
-                <Row>
-                    {vehicleCards}
-                </Row>
-            </Row>
-            <Row className='display-flex flex-column mt-4'>
-                <h6>Starship(s) :</h6>
-                <Row>
-                    {starshipCards}
                 </Row>
             </Row>
             <Row className='display-flex flex-column mt-4'>
                 <h6>Apparition in films :</h6>
                 <Row>
                     {filmCards}
+                </Row>
+            </Row>
+            <Row className='display-flex flex-column mt-4'>
+                <h6>Known people :</h6>
+                <Row>
+                    {peopleCards}
                 </Row>
             </Row>
         </Container>
@@ -155,4 +127,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(PersonDetails);
+  )(SpecieDetails);

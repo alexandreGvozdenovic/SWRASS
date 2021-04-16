@@ -10,6 +10,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Card from 'react-bootstrap/Card';
+import Spinner from 'react-bootstrap/Spinner';
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
@@ -55,8 +56,12 @@ function Films({userFromStore}) {
       <Container>
           <NavBar />
           {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-          <h4 className='SubTitle mt-4'>This is all the films recorded from the database</h4>
-
+          {films.length === 0 &&(
+            <h4 className='SubTitle mt-4'>Films are being retrieved from the database <Spinner animation="border" /></h4>
+          )}
+          {films.length > 0 &&(
+            <h4 className='SubTitle mt-4'>This is all the films recorded from the database</h4>
+          )}
           {/* <Row className='justify-content-center mt-5'>
             <Form
                 inline 

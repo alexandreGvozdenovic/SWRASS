@@ -30,8 +30,13 @@ function NavbarComponent() {
         <Nav className="mr-auto">
             <Link to='/home' className='mr-2'>Home</Link>
             <Link to='/people' className='mr-2'>People</Link>
+            <Link to='/species' className='mr-2'>Species</Link>
             <Link to='/planets' className='mr-2'>Planets</Link>
             <Link to='/films' className='mr-2'>Films</Link>
+            <Link to='/vehicles' className='mr-2'>Vehicles</Link>
+            <Link to='/starships' className='mr-2'>Starships</Link>
+
+
         </Nav>
         {/* <Form inline>
         <FormControl type="text" placeholder="Search" className="mr-sm-2" />

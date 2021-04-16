@@ -28,45 +28,54 @@ import StarshipCard from '../subComponents/cards/starshipCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function PersonDetails({userFromStore, location}) {
-    const [person, setPerson] = useState();
+function FilmDetails({userFromStore, location}) {
+    const [film, setFilm] = useState();
 
     useEffect(() => {
-        const getPersonInformation = () => {
-            let personFromFront = JSON.stringify(location.state.person);
-            fetch(`http://localhost:3000/person?personFromFront=${personFromFront}`)
+        const getFilmInformation = () => {
+            let filmFromFront = JSON.stringify(location.state.film);
+            fetch(`http://localhost:3000/film?filmFromFront=${filmFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedPerson)
-                setPerson(jsonResponse.populatedPerson);
+                console.log(jsonResponse.populatedFilm)
+                setFilm(jsonResponse.populatedFilm);
             })
 
         }
-        getPersonInformation();
+        getFilmInformation();
     },[])
 
 
     if(!userFromStore) {
         return ( <Redirect to='/' />)
-    } else if(person === undefined) {
+    } else if(film === undefined) {
         return (
             <Container>
                 <NavBar />
                 {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-                <h4 className='SubTitle mt-4'>This is {location.state.person.name}</h4>
-                <h5 className='SubTitle mt-4'>Learn all there is to know about {location.state.person.gender === 'male' ? 'him' : 'her'} in a few seconds <Spinner animation="border" /></h5>
+                <h4 className='SubTitle mt-4'>This is {location.state.film.title}</h4>
+                <h5 className='SubTitle mt-4'>Learn all there is to know about it in a few seconds <Spinner animation="border" /></h5>
             </Container>
         )
     } else {
-        let filmCards = person.films.map((film, index)=>{
+
+        let peopleCards = film.characters.map((person, index)=>{
             return (
                 <Col xs={12} md={4}>
-                    <FilmCard key={index + film.title} film={film} />
+                    <PersonCard key={index + person.name} person={person} />
                 </Col>
                 
             )
         })
-        let specieCards = person.species.map((specie, index)=>{
+        let planetCards = film.planets.map((planet, index)=>{
+            return (
+                <Col xs={12} md={4}>
+                    <PlanetCard key={index + planet.name} planet={planet} />
+                </Col>
+                
+            )
+        })
+        let specieCards = film.species.map((specie, index)=>{
             return (
                 <Col xs={12} md={4}>
                     <SpecieCard key={index + specie.name} specie={specie} />
@@ -74,7 +83,7 @@ function PersonDetails({userFromStore, location}) {
                 
             )
         })
-        let vehicleCards = person.vehicles.map((vehicle, index)=>{
+        let vehicleCards = film.vehicles.map((vehicle, index)=>{
             return (
                 <Col xs={12} md={4}>
                     <VehicleCard key={index + vehicle.name} vehicle={vehicle} />
@@ -82,7 +91,7 @@ function PersonDetails({userFromStore, location}) {
                 
             )
         })
-        let starshipCards = person.starships.map((starship, index)=>{
+        let starshipCards = film.starships.map((starship, index)=>{
             return (
                 <Col xs={12} md={4}>
                     <StarshipCard key={index + starship.name} starship={starship} />
@@ -94,25 +103,33 @@ function PersonDetails({userFromStore, location}) {
         <Container className='mb-5'>
             <NavBar />
             {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-            <h4 className='SubTitle mt-4'>This is {person.name}</h4>
-            <h5 className='SubTitle mt-4'>Learn all there is to know about {person.gender === 'male' ? 'him' : 'her'}</h5>
+            <h4 className='SubTitle mt-4'>This is {film.title}</h4>
+            <h5 className='SubTitle mt-4'>Learn all there is to know about it</h5>
             <Row className='display-flex flex-column mt-4'>
                 <h6>Description :</h6>
                 <p>
-                    {person.name} was born the year {person.birth_year} {person.gender === 'male' ? 'he' : 'she'} is {person.height} cm tall and weights {person.mass} kg. {person.gender === 'male' ? 'He' : 'She'} has {person.eye_color} eyes, {person.hair_color} hair and {person.skin_color} skin.
+                    {film.title} was released {film.release_date} it was directeed by {film.director} and produced by {film.producer}.
+                </p>
+                <h6>Synopsis :</h6>
+                <p>
+                    {film.opening_crawl}
                 </p>
                 
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Homeworld :</h6>
+                <h6>Characters appearing :</h6>
                 <Row>
-                    <Col>
-                        <PlanetCard planet={person.homeworld}/>
-                    </Col>
+                    {peopleCards}
                 </Row>
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Specie(s) :</h6>
+                <h6>Planets appearing :</h6>
+                <Row>
+                    {planetCards}
+                </Row>
+            </Row>
+            <Row className='display-flex flex-column mt-4'>
+                <h6>Species appearing :</h6>
                 <Row>
                     {specieCards}
                 </Row>
@@ -127,12 +144,6 @@ function PersonDetails({userFromStore, location}) {
                 <h6>Starship(s) :</h6>
                 <Row>
                     {starshipCards}
-                </Row>
-            </Row>
-            <Row className='display-flex flex-column mt-4'>
-                <h6>Apparition in films :</h6>
-                <Row>
-                    {filmCards}
                 </Row>
             </Row>
         </Container>
@@ -155,4 +166,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(PersonDetails);
+  )(FilmDetails);

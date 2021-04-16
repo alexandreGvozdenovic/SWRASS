@@ -12,24 +12,68 @@ import FormControl from 'react-bootstrap/FormControl';
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 function List({array, type}) {
-
-
-    let arrayList = array.map((element,index)=>{
+    let arrayList = array.map((element,index)=> {
         let property;
-        let propertyBis;
-        if(type === 'people' || type === 'species' || type === 'planets') property = 'name';
-        if(type === 'films') property = 'title';
-        if(type === 'vehicles' || type === 'starships') property = 'name'; propertyBis = 'model';
-
+        let path;
+        switch (type) {
+            case 'people':
+              path = {
+                  pathname: '/person-details',
+                  state: {person: element}
+              };
+              property = 'name'
+              break;
+            case 'species':
+                path = {
+                    pathname: '/specie-details',
+                    state: {specie: element}
+                };
+                property = 'name'
+                break;
+            case 'planets':
+                path = {
+                    pathname: '/planet-details',
+                    state: {planet: element}
+                };
+                property = 'name'
+                break;
+            case 'films':
+                path = {
+                    pathname: '/film-details',
+                    state: {film: element}
+                };
+                property = 'title'
+                break;
+            case 'vehicles':
+                path = {
+                    pathname: '/vehicle-details',
+                    state: {vehicle: element}
+                };
+                property = 'model';
+                break;
+            case 'starships':
+                path = {
+                    pathname: '/starship-details',
+                    state: {starship: element}
+                };
+                property = 'model';
+                break;
+            default:
+              console.log(`ERROR IN THE SWITCH LIST`);
+          }
         return (
             <ListGroup.Item 
                 key={index + element[property]}
-                style={{cursor:'pointer'}}
             >
-                {element[property]} {element[propertyBis] !== undefined ? ` - ${element[propertyBis]}` : ''}
+                <Link 
+                    to={path}
+                    style={{textDecoration:'none', color:'black'}}
+                >
+                    {element[property]}
+                </Link>
             </ListGroup.Item>
         )
     })

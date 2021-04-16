@@ -9,6 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import Spinner from 'react-bootstrap/Spinner';
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
@@ -21,6 +22,7 @@ import Masonry from 'react-masonry-css';
 
 function Home({userFromStore}) {
     const [research, setResearch] = useState('');
+    const [spinner, setSpinner] = useState({display:'none'})
     const [films, setFilms] = useState([]);
     const [people, setPeople] = useState([]);
     const [planets, setPlanets] = useState([]);
@@ -39,6 +41,7 @@ function Home({userFromStore}) {
             setSpecies(jsonResponse.species);
             setStarships(jsonResponse.starships);
             setVehicles(jsonResponse.vehicles);
+            setSpinner({display:'none'})
         })
     }
 
@@ -54,7 +57,7 @@ function Home({userFromStore}) {
             <Form
                 inline 
                 onSubmit={(e)=> {
-                    console.log(research);
+                    setSpinner(null);
                     handleSubmit();
                     e.preventDefault();
                 }}
@@ -69,14 +72,15 @@ function Home({userFromStore}) {
                         onChange={(e)=> setResearch(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" className='mr-2'>
                     Submit
                 </Button>
+                <Spinner animation="border" style={spinner} />
             </Form>
           </Row>
           <Masonry
             breakpointCols={3}
-            className="my-masonry-grid"
+            className="my-masonry-grid mt-4"
             columnClassName="my-masonry-grid_column"
           >
               <div className='mt-4'>

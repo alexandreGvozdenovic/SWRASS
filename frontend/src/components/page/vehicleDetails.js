@@ -11,7 +11,6 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
@@ -25,37 +24,36 @@ import PersonCard from '../subComponents/cards/personCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function PlanetDetails({userFromStore, location}) {
-    const [planet, setPlanet] = useState();
-    console.log(planet);
+function VehicleDetails({userFromStore, location}) {
+    const [vehicle, setVehicle] = useState();
     useEffect(() => {
-        const getPlanetInformation = () => {
-            let planetFromFront = JSON.stringify(location.state.planet);
-            fetch(`http://localhost:3000/planet?planetFromFront=${planetFromFront}`)
+        const getVehicleInformation = () => {
+            let vehicleFromFront = JSON.stringify(location.state.vehicle);
+            fetch(`http://localhost:3000/vehicle?vehicleFromFront=${vehicleFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedPlanet)
-                setPlanet(jsonResponse.populatedPlanet);
+                console.log(jsonResponse.populatedVehicle)
+                setVehicle(jsonResponse.populatedVehicle);
             })
 
         }
-        getPlanetInformation();
+        getVehicleInformation();
     },[])
 
     if(!userFromStore) {
         return ( <Redirect to='/' />)
-    } else if(planet === undefined) {
+    } else if(vehicle === undefined) {
         return(
             <Container>
                 <NavBar />
                 {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-                <h4 className='SubTitle mt-4'>This is {location.state.planet.name}</h4>
+                <h4 className='SubTitle mt-4'>This is the {location.state.vehicle.name}</h4>
                 <h5 className='SubTitle mt-4'>Learn all there is to know about it in a few seconds <Spinner animation="border" /></h5>
             </Container>
         )
     } else {
 
-        let filmCards = planet.films.map((film,index)=>{
+        let filmCards = vehicle.films.map((film,index)=>{
             return (
                 <Col xs={12} md={4}>
                     <FilmCard key={index + film.title} film={film} />
@@ -63,10 +61,10 @@ function PlanetDetails({userFromStore, location}) {
                 
             )
         })
-        let personCards = planet.residents.map((resident, index)=>{
+        let personCards = vehicle.pilots.map((pilot, index)=>{
             return (
                 <Col xs={12} md={4}>
-                    <PersonCard key={index + resident.name} person={resident} />
+                    <PersonCard key={index + pilot.name} person={pilot} />
                 </Col>
                 
             )
@@ -75,23 +73,21 @@ function PlanetDetails({userFromStore, location}) {
         <Container>
             <NavBar />
             {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
-            <h4 className='SubTitle mt-4'>This is {planet.name}</h4>
+            <h4 className='SubTitle mt-4'>This is the {vehicle.name}</h4>
             <h5 className='SubTitle mt-4'>Learn all there is to know about it</h5>
             <Row className='display-flex flex-column mt-4'>
                 <h6>Description :</h6>
-                <p>The planet {planet.name} has a {planet.climate} climate and it's terrain is mostly {planet.terrain}.
-                It's diameter is {planet.diameter} km, the planet is {planet.surface_water}% water and it's gravity is {planet.gravity} compared to Earth.
-                {planet.name} has an orbital period of {planet.orbital_period} days and it's rotation is done in {planet.rotation_period} hours.</p>
+                <p>The {vehicle.model} is a class {vehicle.vehicle_class} vehicle manufactured by {vehicle.manufacturer} with a top atmospherique speed of {vehicle.max_atmosphering_speed} km/h. It needs a crew of {vehicle.crew} to operate and can take up to {vehicle.passengers} passengers. The {vehicle.name}'s length is {vehicle.length} meters, it's cargo capacity is {vehicle.cargo_capacity} kg, it can provide it's crew for {vehicle.consumables} and it only costs {vehicle.cost_in_credits} credits. </p>
                 
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Films {planet.name} appeared in :</h6>
+                <h6>Films {vehicle.name} appeared in :</h6>
                 <Row>
                     {filmCards}
                 </Row>
             </Row>
             <Row className='display-flex flex-column mt-4'>
-                <h6>Residents of {planet.name} :</h6>
+                <h6>Pilots of the {vehicle.name} :</h6>
                 <Row>
                     {personCards}
                 </Row>
@@ -123,4 +119,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(PlanetDetails);
+  )(VehicleDetails);

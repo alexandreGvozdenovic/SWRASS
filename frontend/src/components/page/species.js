@@ -20,31 +20,34 @@ import { Redirect } from 'react-router-dom'
 import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
+import PersonCard from '../subComponents/cards/personCard';
+import SpecieCard from '../subComponents/cards/specieCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
 
-function Planets({userFromStore}) {
+function Species({userFromStore}) {
     const [research, setResearch] = useState('');
-    const [planets, setPlanets] = useState([]);
+    const [species, setSpecies] = useState([]);
+
     useEffect(()=>{
-        const getPlanets = () => {
-            fetch(`http://localhost:3000/planets`)
+        const getSpecies = () => {
+            fetch(`http://localhost:3000/species`)
             .then(response => response.json())
             .then((jsonResponse) => {
                 console.log(jsonResponse)
-                let unsortedPlanets = jsonResponse.planets;
-                let sortedPlanets = unsortedPlanets.sort((a, b) => a.name.localeCompare(b.name))
-                setPlanets(sortedPlanets);
+                let unsortedSpecies = jsonResponse.species;
+                let sortedSpecies = unsortedSpecies.sort((a, b) => a.name.localeCompare(b.name))
+                setSpecies(sortedSpecies);
             })
 
         }
-        getPlanets();
+        getSpecies();
     },[])
 
-    let cards = planets.map((planet,index)=> {
+    let cards = species.map((specie,index)=> {
 
         return(
-            <PlanetCard key={index + planet.name} planet={planet} />
+            <SpecieCard key={index + specie.name} specie={specie} />
         )
     })
     if(!userFromStore) {
@@ -53,11 +56,11 @@ function Planets({userFromStore}) {
   return (
       <Container>
           <NavBar />
-          {planets.length === 0 &&(
-            <h4 className='SubTitle mt-4'>Planets are being retrieved from the database <Spinner animation="border" /></h4>
+          {species.length === 0 &&(
+            <h4 className='SubTitle mt-4'>Species are being retrieved from the database <Spinner animation="border" /></h4>
           )}
-          {planets.length > 0 &&(
-            <h4 className='SubTitle mt-4'>This is all the planets recorded from the database</h4>
+          {species.length > 0 &&(
+            <h4 className='SubTitle mt-4'>This is all the species recorded from the database</h4>
           )}
 
           {/* <Row className='justify-content-center mt-5'>
@@ -110,4 +113,4 @@ function mapDispatchToProps(dispatch) {
   export default connect(
       mapStateToProps,
       mapDispatchToProps
-  )(Planets);
+  )(Species);

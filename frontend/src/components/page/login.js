@@ -18,6 +18,8 @@ function Login({authorizedUser, userFromStore}) {
     console.log('USER FROM STORE', userFromStore);
     const [password, setPassword] = useState('');
     const [authorized, setAuthorized] = useState(false);
+    const [loginError, setLoginError] = useState(false);
+    const [errorCount, setErrorCount] = useState(0);
 
     const handleSignIn = () => {
         fetch('http://localhost:3000/sign-in',{
@@ -33,6 +35,11 @@ function Login({authorizedUser, userFromStore}) {
             if(jsonResponse.authorized){
                 authorizedUser(jsonResponse.name);
                 setAuthorized(true);
+            } else {
+                setLoginError(true);
+                setIdentification('');
+                setPassword('');
+                setErrorCount(errorCount+1);
             }
         })
         .catch((error)=>{
@@ -64,8 +71,14 @@ function Login({authorizedUser, userFromStore}) {
                         type="text" 
                         placeholder="Enter identification" 
                         value={identification}
-                        onChange={(e)=> setIdentification(e.target.value)}
+                        onChange={(e)=> {
+                            setIdentification(e.target.value);
+                            setLoginError(false);
+                        }}
                     />
+                    {loginError &&(
+                        <span style={{color:'red'}}>Wrong credentials</span>
+                    )}
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
@@ -73,12 +86,22 @@ function Login({authorizedUser, userFromStore}) {
                         type="password" 
                         placeholder="Password" 
                         value={password}
-                        onChange={(e)=> setPassword(e.target.value)}
+                        onChange={(e)=> {
+                            setPassword(e.target.value);
+                            setLoginError(false);
+                        }}
                     />
+                    {loginError &&(
+                        <span style={{color:'red'}}>Wrong credentials</span>
+                    )}
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
+                <Button variant="primary" type="submit" className='mr-2'>
+                    Submit 
                 </Button>
+                {errorCount > 2 &&(
+                    <span style={{color:'red'}}>Try to login as Luke with DadSucks</span>
+                )}
+                
             </Form>
           </Row>
       </Container>
