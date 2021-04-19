@@ -3,9 +3,7 @@ import '../../App.css';
 // BOOTSTRAP
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup'
 import Form from 'react-bootstrap/Form';
 // REDUX
 import { connect } from 'react-redux'
@@ -14,8 +12,6 @@ import { Redirect } from 'react-router-dom'
 
 function Login({authorizedUser, userFromStore}) {
     const [identification, setIdentification] = useState('');
-    // console.log(identification);
-    console.log('USER FROM STORE', userFromStore);
     const [password, setPassword] = useState('');
     const [authorized, setAuthorized] = useState(false);
     const [loginError, setLoginError] = useState(false);
@@ -31,7 +27,6 @@ function Login({authorizedUser, userFromStore}) {
             return response.json();
         })
         .then((jsonResponse) => {
-            console.log(jsonResponse);
             if(jsonResponse.authorized){
                 authorizedUser(jsonResponse.name);
                 setAuthorized(true);
@@ -53,14 +48,13 @@ function Login({authorizedUser, userFromStore}) {
       return ( <Redirect to='/home' />)
   }
   return (
-      <Container>
-          <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1>
+    <Container className='mb-5'>
+        <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1>
           <h4 className='SubTitle mt-4'>Please identify yourself to access the system</h4>
           <Row className='justify-content-center mt-5'>
             <Form 
                 className='w-50' 
                 onSubmit={(e)=> {
-                    console.log(identification,' ',password);
                     handleSignIn();
                     e.preventDefault();
                 }}

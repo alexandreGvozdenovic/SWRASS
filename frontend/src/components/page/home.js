@@ -3,12 +3,9 @@ import '../../App.css';
 // BOOTSTRAP
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
 import Spinner from 'react-bootstrap/Spinner';
 // REDUX
 import { connect } from 'react-redux'
@@ -34,7 +31,6 @@ function Home({userFromStore}) {
         fetch(`http://localhost:3000/search?search=${research}`)
         .then(response => response.json())
         .then((jsonResponse) => {
-            console.log(jsonResponse)
             setFilms(jsonResponse.films);
             setPeople(jsonResponse.people);
             setPlanets(jsonResponse.planets);
@@ -49,7 +45,7 @@ function Home({userFromStore}) {
         return ( <Redirect to='/' />)
     }
   return (
-      <Container>
+      <Container className='mb-5'>
         <NavBar />
           {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
           <h4 className='SubTitle mt-4'>Welcome {userFromStore.name}</h4>

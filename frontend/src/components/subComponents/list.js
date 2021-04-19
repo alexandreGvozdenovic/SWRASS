@@ -1,18 +1,8 @@
-import React, {useState} from 'react';
 import '../../App.css';
 // BOOTSTRAP
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-// REDUX
-import { connect } from 'react-redux'
 // REACT ROUTER
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function List({array, type}) {
     let arrayList = array.map((element,index)=> {

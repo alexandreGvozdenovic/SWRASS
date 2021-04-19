@@ -135,7 +135,6 @@ router.get('/planet', async function(req, res, next) {
 
   populatedPlanet.residents = residents
   populatedPlanet.films = films
-  console.log(populatedPlanet);
 
 
   res.json({populatedPlanet});

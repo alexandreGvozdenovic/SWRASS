@@ -4,25 +4,15 @@ import '../../App.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
 import { Redirect } from 'react-router-dom'
 // MY COMPONENTS
-import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
-import PlanetCard from '../subComponents/cards/planetCard';
 import FilmCard from '../subComponents/cards/filmCard';
 import PersonCard from '../subComponents/cards/personCard';
-// MASONRY
-import Masonry from 'react-masonry-css';
 
 function VehicleDetails({userFromStore, location}) {
     const [vehicle, setVehicle] = useState();
@@ -32,7 +22,6 @@ function VehicleDetails({userFromStore, location}) {
             fetch(`http://localhost:3000/vehicle?vehicleFromFront=${vehicleFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedVehicle)
                 setVehicle(jsonResponse.populatedVehicle);
             })
 
@@ -70,7 +59,7 @@ function VehicleDetails({userFromStore, location}) {
             )
         })
     return (
-        <Container>
+        <Container className='mb-5'>
             <NavBar />
             {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
             <h4 className='SubTitle mt-4'>This is the {vehicle.name}</h4>

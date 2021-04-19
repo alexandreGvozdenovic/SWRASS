@@ -4,12 +4,6 @@ import '../../App.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 
 // REDUX
@@ -17,16 +11,12 @@ import { connect } from 'react-redux'
 // REACT ROUTER
 import { Redirect } from 'react-router-dom'
 // MY COMPONENTS
-import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
 import PlanetCard from '../subComponents/cards/planetCard';
 import FilmCard from '../subComponents/cards/filmCard';
-import PersonCard from '../subComponents/cards/personCard';
 import SpecieCard from '../subComponents/cards/specieCard';
 import VehicleCard from '../subComponents/cards/vehicleCard';
 import StarshipCard from '../subComponents/cards/starshipCard';
-// MASONRY
-import Masonry from 'react-masonry-css';
 
 function PersonDetails({userFromStore, location}) {
     const [person, setPerson] = useState();
@@ -37,7 +27,6 @@ function PersonDetails({userFromStore, location}) {
             fetch(`http://localhost:3000/person?personFromFront=${personFromFront}`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse.populatedPerson)
                 setPerson(jsonResponse.populatedPerson);
             })
 

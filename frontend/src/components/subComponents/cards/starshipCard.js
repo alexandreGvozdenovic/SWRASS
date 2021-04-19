@@ -1,21 +1,8 @@
-import React, {useState, useEffect} from 'react';
 import '../../../App.css';
 // BOOTSTRAP
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
 import Card from 'react-bootstrap/Card';
-// REDUX
-import { connect } from 'react-redux'
 // REACT ROUTER
-import { Redirect, Link } from 'react-router-dom'
-// MASONRY
-import Masonry from 'react-masonry-css';
+import { Link } from 'react-router-dom'
 
 function StarshipCard({starship}) {
   return (

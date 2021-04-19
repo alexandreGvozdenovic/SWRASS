@@ -3,23 +3,15 @@ import '../../App.css';
 // BOOTSTRAP
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 // REDUX
 import { connect } from 'react-redux'
 // REACT ROUTER
 import { Redirect } from 'react-router-dom'
 // MY COMPONENTS
-import CustomList from '../subComponents/list';
 import NavBar from '../subComponents/navbar';
-import PlanetCard from '../subComponents/cards/planetCard';
-import PersonCard from '../subComponents/cards/personCard';
 import FilmCard from '../subComponents/cards/filmCard';
 // MASONRY
 import Masonry from 'react-masonry-css';
@@ -27,22 +19,28 @@ import Masonry from 'react-masonry-css';
 function Films({userFromStore}) {
     const [research, setResearch] = useState('');
     const [films, setFilms] = useState([]);
+    const [unfilteredFilms, setUnfilteredFilms] = useState([]);
+
 
     useEffect(()=>{
         const getFilms = () => {
             fetch(`http://localhost:3000/films`)
             .then(response => response.json())
             .then((jsonResponse) => {
-                console.log(jsonResponse)
                 let unsortedFilms = jsonResponse.films;
                 let sortedFilms = unsortedFilms.sort((a, b) => a.episode_id - b.episode_id)
                 setFilms(sortedFilms);
+                setUnfilteredFilms(sortedFilms);
             })
 
         }
         getFilms();
     },[])
 
+    const handleSearch = () => {
+        let filter = unfilteredFilms.filter((film) => film.title.toLocaleLowerCase().includes(research.toLocaleLowerCase()))
+        setFilms(filter);
+    }
     let cards = films.map((film,index)=> {
 
         return(
@@ -53,8 +51,8 @@ function Films({userFromStore}) {
         return ( <Redirect to='/' />)
     }
   return (
-      <Container>
-          <NavBar />
+    <Container className='mb-5'>
+        <NavBar />
           {/* <h1 className='Title mt-4'>Star Wars Rebels Alliance Search System</h1> */}
           {films.length === 0 &&(
             <h4 className='SubTitle mt-4'>Films are being retrieved from the database <Spinner animation="border" /></h4>
@@ -62,30 +60,35 @@ function Films({userFromStore}) {
           {films.length > 0 &&(
             <h4 className='SubTitle mt-4'>This is all the films recorded from the database</h4>
           )}
-          {/* <Row className='justify-content-center mt-5'>
+        <Row className='justify-content-center mt-5'>
             <Form
                 inline 
                 onSubmit={(e)=> {
-                    console.log(research);
-                    handleSubmit();
                     e.preventDefault();
+                    handleSearch();
+
                 }}
             >
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label className='mr-2'>Search for anything</Form.Label>
+                <Form.Group controlId="formResearch">
+                    <Form.Label className='mr-2'>Search by Title</Form.Label>
                     <Form.Control
                         className='mr-2'
                         type="text" 
-                        placeholder="Death Star, Pew Pew" 
+                        placeholder="Return of the jedi" 
                         value={research}
-                        onChange={(e)=> setResearch(e.target.value)}
+                        onChange={(e)=> {
+                            setResearch(e.target.value);
+                            }}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
+                <Button variant="primary" type="submit" className='mr-2'>
+                    Filter
+                </Button>
+                <Button variant="primary" onClick={() => setFilms(unfilteredFilms)}>
+                    Reset
                 </Button>
             </Form>
-          </Row> */}
+        </Row>
           <Masonry
             breakpointCols={3}
             className="my-masonry-grid"
